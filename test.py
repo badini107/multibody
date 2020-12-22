@@ -13,13 +13,13 @@ class Link():
 links = []
 links.append(Link(0, 0, 1, 0))
 links.append(Link(1, 0, 2, 0))
-links.append(Link(2, 0, 3, 0))
+#links.append(Link(2, 0, 3, 0))
 
 lag = Lagrangian(links)
 lag.energy()
-
-print(lag.x)
-
 lag.square()
 
+print(lag.x)
 print(lag.x2)
+print(lag.y)
+print(lag.y2)

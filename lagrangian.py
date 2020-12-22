@@ -49,33 +49,60 @@ class Lagrangian():
         self.y2 = []  
         for i in range(len(self.x)):
             self.x2.append([])
-            count  = 0
+            self.y2.append([])
             for j in range(len(self.x[i])):
-                for l in range(len(self.x[i])):
-                    self.x2[i].append({})
-                    for k, v in self.x[i][j].items():
-                        added = 0
-                        for k2, v2 in self.x[i][l].items():
-                            if k == k2:
-                                if k == 'const':
-                                    if k in self.x2[i][j + l]:
-                                        self.x2[i][j + l][k] += v * v2
-                                    else:
-                                        self.x2[i][j + l][k] = v * v2
-                                elif v == v2:
-                                    self.x2[i][j + l][k] = v + '2'
-                                else:
-                                    self.x2[i][j + l][k] = v + v2
-                                added = 1
-                                break
-                        if not added:
-                            if k in self.x2[i][j + l]:
-                                self.x2[i][j + l][k] += v
+                for l in range(j, len(self.x[i])):
+                    expression_x = {}
+                    expression_y = {}
+                    if j == l:
+                        for k, v in self.x[i][j].items():
+                            if isinstance(v, str):
+                                expression_x[k] = v + '2'
                             else:
-                                self.x2[i][j + l][k] = v
+                                expression_x[k] = v ** 2
 
-                    print(count, self.x2[i][j + l])
-                    count += 1
+                        for k, v in self.y[i][j].items():
+                            if isinstance(v, str):
+                                expression_y[k] = v + '2'
+                            else:
+                                expression_y[k] = v ** 2
+                    else:
+                        for k, v in self.x[i][j].items():
+                            if k in self.x[i][l].keys():
+                                if k == 'const':
+                                    expression_x[k] = 2 * v * self.x[i][l][k]
+                                elif v == self.x[i][l][k]:
+                                    expression_x[k] = v + '2'
+                                else:
+                                    expression_x[k] = v + self.x[i][l][k]
+                            else:
+                                expression_x[k] = v
+
+                        for k, v in self.x[i][l].items():
+                            if not k in self.x[i][j].keys():
+                                expression_x[k] = v
+                                
+                        for k, v in self.y[i][j].items():
+                            if k in self.y[i][l].keys():
+                                if k == 'const':
+                                    expression_y[k] = 2 * v * self.y[i][l][k]
+                                elif v == self.y[i][l][k]:
+                                    expression_y[k] = v + '2'
+                                else:
+                                    expression_y[k] = v + self.y[i][l][k]
+                            else:
+                                expression_y[k] = v
+
+                        for k, v in self.y[i][l].items():
+                            if not k in self.y[i][j].keys():
+                                expression_y[k] = v
+
+                    self.x2[i].append(expression_x)
+                    self.y2[i].append(expression_y)
+                
+                
+
+                    
                
 
 

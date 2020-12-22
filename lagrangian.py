@@ -1,28 +1,16 @@
 import math
 
+derivate_table = {
+    'sin' : 'cos',
+    'cos' : '-sin'
+}
+
 class Lagrangian():
     def __init__(self, links):
         self.links = links
-
-        self.links_vel2 = []
-
-    def vel(self):
-        for i, link in enumerate(self.links):
-            x = link.ang_vel * link.length/2 * math.cos(link.angle)
-            y = link.ang_vel * link.length/2 * math.sin(link.angle)
-            for j in range(0, i):
-                x += self.links[j].ang_vel * self.links[j].length/2 * math.cos(self.links[j].angle)
-                y += self.links[j].ang_vel * self.links[j].length/2 * math.cos(self.links[j].angle)
-            self.links_vel2 = x
-            
-
-    def T(self):
-        for i, link in enumerate(self.links):
-            self.T += self.link.mass * (self.link.ang_vel ** 2) * self.link.length/2
-            for j in range(1, i):
-                pass
+        self.g = 10
     
-    def energy(self):
+    def system(self):
         self.x = []
         self.y = []      
         for i, link in enumerate(self.links):
@@ -41,7 +29,7 @@ class Lagrangian():
                 })
                 self.y[i].append({
                     'const' : -1 * self.links[j].length,
-                    'theta' + str(i): 'cos'
+                    'theta' + str(j): 'cos'
                 })
 
     def square(self, expression):
@@ -75,6 +63,62 @@ class Lagrangian():
                     expression_sqr[i].append(exp)
         
         return expression_sqr
+
+    def derivate(self, expression, derivator):
+        expression_d = []
+        if derivator == 't':
+            for i in range(len(expression)):
+                expression_d.append([])
+                for j in range(len(expression[i])):
+                    exp = {}
+                    for k, v in expression[i][j].items():
+                        if k == 'const':
+                            exp[k] = v
+                        else:
+                            if derivate_table[v][0] == '-':
+                                exp['const'] *= -1
+                                exp[k] = derivate_table[v][1:]
+                            else:
+                                exp[k] = derivate_table[v]
+                            exp[k + "'"] = '1'
+                    expression_d[i].append(exp)
+
+            return expression_d
+    
+    def addition(self, expression):
+        expression_add = []
+        for i in range(len(expression)):
+            expression_add.append([])
+            for j in range(len(expression[i])):
+                if not expression[i][j] in expression_add[i]:
+                    expression_add[i].append(expression[i][j])
+                else:
+                    expression_add[i].remove(expression[i][j])
+                    exp = expression[i][j]
+                    exp['const'] += 1
+                    expression_add[i].append(exp)
+
+        return expression_add
+
+    def potential(self):
+        self.potential_energy = []
+        pot = []
+        for i, link in enumerate(self.links):
+            pot.append({
+                'const' : 0.5 * link.mass * self.g * link.length,
+                'theta' + str(i): 'cos'
+            })
+            for j in range(i):
+                pot.append({
+                    'const' : self.links[j].mass * self.g * self.links[j].length,
+                    'theta' + str(j): 'cos'
+                })
+        self.potential_energy.append(pot)
+    
+    def kinetic(self, ):
+        self.kinetic_energy = []
+        kin = []
+
                 
                 
 

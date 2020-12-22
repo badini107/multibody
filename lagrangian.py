@@ -44,61 +44,37 @@ class Lagrangian():
                     'theta' + str(i): 'cos'
                 })
 
-    def square(self):
-        self.x2 = []
-        self.y2 = []  
-        for i in range(len(self.x)):
-            self.x2.append([])
-            self.y2.append([])
-            for j in range(len(self.x[i])):
-                for l in range(j, len(self.x[i])):
-                    expression_x = {}
-                    expression_y = {}
+    def square(self, expression):
+        expression_sqr = []
+        for i in range(len(expression)):
+            expression_sqr.append([])
+            for j in range(len(expression[i])):
+                for l in range(j, len(expression[i])):
+                    exp = {}
                     if j == l:
-                        for k, v in self.x[i][j].items():
+                        for k, v in expression[i][j].items():
                             if isinstance(v, str):
-                                expression_x[k] = v + '2'
+                                exp[k] = v + '2'
                             else:
-                                expression_x[k] = v ** 2
-
-                        for k, v in self.y[i][j].items():
-                            if isinstance(v, str):
-                                expression_y[k] = v + '2'
-                            else:
-                                expression_y[k] = v ** 2
+                                exp[k] = v ** 2
                     else:
-                        for k, v in self.x[i][j].items():
-                            if k in self.x[i][l].keys():
+                        for k, v in expression[i][j].items():
+                            if k in expression[i][l].keys():
                                 if k == 'const':
-                                    expression_x[k] = 2 * v * self.x[i][l][k]
-                                elif v == self.x[i][l][k]:
-                                    expression_x[k] = v + '2'
+                                    exp[k] = 2 * v * expression[i][l][k]
+                                elif v == expression[i][l][k]:
+                                    exp[k] = v + '2'
                                 else:
-                                    expression_x[k] = v + self.x[i][l][k]
+                                    exp[k] = v + expression[i][l][k]
                             else:
-                                expression_x[k] = v
+                                exp[k] = v
 
-                        for k, v in self.x[i][l].items():
-                            if not k in self.x[i][j].keys():
-                                expression_x[k] = v
-                                
-                        for k, v in self.y[i][j].items():
-                            if k in self.y[i][l].keys():
-                                if k == 'const':
-                                    expression_y[k] = 2 * v * self.y[i][l][k]
-                                elif v == self.y[i][l][k]:
-                                    expression_y[k] = v + '2'
-                                else:
-                                    expression_y[k] = v + self.y[i][l][k]
-                            else:
-                                expression_y[k] = v
-
-                        for k, v in self.y[i][l].items():
-                            if not k in self.y[i][j].keys():
-                                expression_y[k] = v
-
-                    self.x2[i].append(expression_x)
-                    self.y2[i].append(expression_y)
+                        for k, v in expression[i][l].items():
+                            if not k in expression[i][j].keys():
+                                exp[k] = v
+                    expression_sqr[i].append(exp)
+        
+        return expression_sqr
                 
                 
 

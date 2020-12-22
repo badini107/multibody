@@ -17,9 +17,7 @@ links.append(Link(1, 0, 2, 0))
 
 lag = Lagrangian(links)
 lag.energy()
-lag.square()
-
 print(lag.x)
-print(lag.x2)
+print(lag.square(lag.x))
 print(lag.y)
-print(lag.y2)
+print(lag.square(lag.y))

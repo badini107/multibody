@@ -29,6 +29,12 @@ dty = lag.derivate(lag.y,'t')
 #print(dty)
 dty2 = lag.square(dty)
 #print(dty2)
-sum_dt = dtx2 + dty2
+sum_dt = [dtx2[0] + dty2[0]]
+sum_dt.append(dtx2[1] + dty2[1])
 add_dt = lag.addition(sum_dt)
-print(add_dt)
+#print(add_dt)
+lag.kinetic(add_dt)
+#print(lag.kinetic_energy)
+l = [lag.kinetic_energy[0] + lag.potential_energy[0]]
+L = lag.addition(l)
+print(L)

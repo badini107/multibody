@@ -115,9 +115,16 @@ class Lagrangian():
                 })
         self.potential_energy.append(pot)
     
-    def kinetic(self, ):
+    def kinetic(self, velocity):
         self.kinetic_energy = []
         kin = []
+        for i, bodys in enumerate(velocity):
+            for vel in bodys:
+                exp = vel
+                exp['const'] *= 0.5 * self.links[i].mass
+                kin.append(exp)
+                
+        self.kinetic_energy.append(kin)
 
                 
                 

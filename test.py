@@ -1,8 +1,6 @@
 from lagrangian import Lagrangian
 import math
 
-
-
 class Link():
     def __init__(self, x0, y0, x1, y1):
         self.x0 = x0
@@ -38,3 +36,6 @@ lag.kinetic(add_dt)
 l = [lag.kinetic_energy[0] + lag.potential_energy[0]]
 L = lag.addition(l)
 print(L)
+
+dL = lag.derivate(L,'theta0')
+print(dL)

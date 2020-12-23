@@ -2,7 +2,9 @@ import math
 
 derivate_table = {
     'sin' : 'cos',
-    'cos' : '-sin'
+    'cos' : '-sin',
+    'cos2': '-2sincos',
+    'sin2': '2sincos'
 }
 
 class Lagrangian():
@@ -80,11 +82,56 @@ class Lagrangian():
                                 exp[k] = derivate_table[v][1:]
                             else:
                                 exp[k] = derivate_table[v]
-                            exp[k + "'"] = '1'
+                            exp[k + "'"] = '_'
                     expression_d[i].append(exp)
 
             return expression_d
-    
+        
+        else:
+            for i in range(len(expression)):
+                expression_d.append([])
+                for j in range(len(expression[i])):
+                    if derivator in expression[i][j].keys():
+                        exp = {}
+                        for k, v in expression[i][j].items():
+                            if k == derivator:
+                                if derivate_table[v] == '-2sincos':
+                                    exp['const'] *= -2
+                                    exp[k] = 'sincos'
+                                    
+                                elif derivate_table[v] == '2sincos':
+                                    exp['const'] *= 2
+                                    exp[k] = 'sincos'
+                                elif v == '_2':
+                                    exp['const'] *= 2
+                                    exp[k] = v
+                                elif v == '_':
+                                    pass
+                                else:
+                                    if derivate_table[v][0] == '-':
+                                        exp['const'] *= -1
+                                        exp[k] = derivate_table[v][1:]
+                                    else:
+                                        exp[k] = derivate_table[v]
+                                if k + "'" in exp.keys():
+                                    if exp[k + "'"] == v:
+                                        exp[k + "'"] += '2'
+                                    else:
+                                        exp[k + "'"] += v
+                                else:
+                                    exp[k + "'"] = '_'
+                            else:
+                                if k in exp.keys():
+                                    if exp[k] == v:
+                                        exp[k] += '2'
+                                    else:
+                                        exp[k] += v
+                                else:
+                                    exp[k] = v
+                        expression_d[i].append(exp)
+
+            return expression_d
+
     def addition(self, expression):
         expression_add = []
         for i in range(len(expression)):
